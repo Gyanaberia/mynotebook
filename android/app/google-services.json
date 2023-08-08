@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "462321759833",
+    "project_id": "mynotebookapp",
+    "storage_bucket": "mynotebookapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462321759833:android:24967a7717a4224cbb2348",
+        "android_client_info": {
+          "package_name": "com.gyanapps.mynotebook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462321759833-i055hvvtlgennbrv91d7ovojm61udgar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnPjcKHjdr-lZxZ8dRv9nneGMynuuh2MM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462321759833-i055hvvtlgennbrv91d7ovojm61udgar.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
