@@ -36,66 +36,51 @@ class _RegisterViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login"),
-      ),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
+        appBar: AppBar(
+          title: const Text("Login"),
         ),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              return Column(
-                children: [
-                  TextField(
-                    decoration:
-                        const InputDecoration(hintText: "Enter your email"),
-                    keyboardType: TextInputType.emailAddress,
-                    autocorrect: false,
-                    controller: _email,
-                  ),
-                  TextField(
-                    decoration: const InputDecoration(hintText: "Password"),
-                    obscureText: true,
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    controller: _password,
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      final email = _email.text;
-                      final password = _password.text;
+        body: Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(hintText: "Enter your email"),
+              keyboardType: TextInputType.emailAddress,
+              autocorrect: false,
+              controller: _email,
+            ),
+            TextField(
+              decoration: const InputDecoration(hintText: "Password"),
+              obscureText: true,
+              autocorrect: false,
+              enableSuggestions: false,
+              controller: _password,
+            ),
+            TextButton(
+              onPressed: () async {
+                final email = _email.text;
+                final password = _password.text;
 
-                      try {
-                        final userCredentials = await FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                                email: email, password: password);
-                        devtools.log(userCredentials.toString());
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == "user-not-found") {
-                          devtools.log("user not found");
-                        } else if (e.code == "wrong-password") {
-                          devtools.log("wrong password");
-                        }
-                      }
-                    },
-                    child: const Text("Login"),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/register/', (route) => false);
-                      },
-                      child:
-                          const Text("Don't have an account? Register here!"))
-                ],
-              );
-            default:
-              return const Text("Loading...");
-          }
-        },
-      ),
-    );
+                try {
+                  final userCredentials = await FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                          email: email, password: password);
+                  devtools.log(userCredentials.toString());
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == "user-not-found") {
+                    devtools.log("user not found");
+                  } else if (e.code == "wrong-password") {
+                    devtools.log("wrong password");
+                  }
+                }
+              },
+              child: const Text("Login"),
+            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil('/register/', (route) => false);
+                },
+                child: const Text("Don't have an account? Register here!"))
+          ],
+        ));
   }
 }

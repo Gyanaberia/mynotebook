@@ -7,8 +7,10 @@ import 'package:mynotebook/views/login_view.dart';
 import 'package:mynotebook/views/register_view.dart';
 import 'dart:developer' as devtools show log;
 
+import 'package:mynotebook/views/verify_email.dart';
+
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); // what does it do?
   runApp(MaterialApp(
     title: 'Flutter Demo',
     theme: ThemeData(
@@ -28,31 +30,31 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login"),
-        backgroundColor: Colors.blue,
+    return FutureBuilder(
+      future: Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
       ),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        ),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              final user = FirebaseAuth.instance.currentUser;
-              if (user?.emailVerified ?? false) {
-                devtools.log("You are a verifired user");
-              } else {
-                devtools.log("You need to verify your email first");
-              }
-              // devtools.log(FirebaseAuth.instance.currentUser.toString());
-              return const Text("DOne");
-            default:
-              return const Text("Loading...");
-          }
-        },
-      ),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            // final user = FirebaseAuth.instance.currentUser;
+            // if (user?.emailVerified ?? false) {
+            //   devtools.log("You are a verifired user");
+            // } else {
+            //   Navigator.of(context).push(
+            //     MaterialPageRoute(
+            //       builder: (context) => const VerifyEmailView(),
+            //     ),
+            //   );
+            //   // devtools.log("You need to verify your email first");
+            // }
+            return const LoginView();
+
+          // devtools.log(FirebaseAuth.instance.currentUser.toString());
+          default:
+            return const CircularProgressIndicator();
+        }
+      },
     );
   }
 }
