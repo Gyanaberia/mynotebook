@@ -64,6 +64,8 @@ class _RegisterViewState extends State<LoginView> {
                       .signInWithEmailAndPassword(
                           email: email, password: password);
                   devtools.log(userCredentials.toString());
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil('/', (route) => false);
                 } on FirebaseAuthException catch (e) {
                   if (e.code == "user-not-found") {
                     devtools.log("user not found");
