@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_analytics_methods/ga_methods.dart';
 import "dart:developer" as devtools show log;
-import '../firebase_options.dart';
+
+import 'package:mynotebook/constants/routes.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -12,6 +13,8 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
+  AnalyticsClass analytics = AnalyticsClass();
+
   late final TextEditingController _email;
   late final TextEditingController _password;
   late final TextEditingController _cpassword;
@@ -62,18 +65,31 @@ class _RegisterViewState extends State<RegisterView> {
                   final userCredentials = await FirebaseAuth.instance
                       .createUserWithEmailAndPassword(
                           email: email, password: password);
-                  // print(userCredentials);
+                  devtools.log(userCredentials.toString());
                   const SnackBar(content: Text("User registered"));
+
+                  analytics.signupEvent('analytics signup');
+
+                  // FirebaseAnalytics.instance
+                  //     .logSignUp(signUpMethod: "Custom Signup");
                   // ignore: use_build_context_synchronously
                   Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/login/', (route) => false);
+                      .pushNamedAndRemoveUntil(loginRoute, (route) => false);
                 } on FirebaseAuthException catch (e) {
-                  if (e.code == "weak-password") {
+                  print(e.toString());
+                  print(e.code);
+                  if (e.code == "auth/weak-password") {
                     devtools.log("Weak password");
-                  } else if (e.code == "invalid-email") {
+                    const SnackBar(content: Text("Weak Password"));
+                  } else if (e.code == "auth/invalid-email") {
                     devtools.log("Invalid email");
-                  } else if (e.code == "email-already-in-use") {
+                    const SnackBar(content: Text("Invalid Email"));
+                  } else if (e.code == "auth/email-already-in-use") {
                     devtools.log("Email already in use");
+                    const SnackBar(content: Text("Email already in user"));
+                  } else {
+                    const SnackBar(
+                        content: Text("Some error occured. Try Again!!"));
                   }
                 }
               },
@@ -82,7 +98,7 @@ class _RegisterViewState extends State<RegisterView> {
             TextButton(
                 onPressed: () {
                   Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/login/', (route) => false);
+                      .pushNamedAndRemoveUntil(loginRoute, (route) => false);
                 },
                 child: const Text("Already have an account? Login here!"))
           ],

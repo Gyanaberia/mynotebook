@@ -29,17 +29,21 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             child: const Text("Send email verification"),
           ),
           TextButton(
-              onPressed: () {
+              onPressed: () async {
+                final messenger = ScaffoldMessenger.of(context);
+                await FirebaseAuth.instance.currentUser?.reload();
                 final user = FirebaseAuth.instance.currentUser;
                 log(user.toString());
                 if (user!.emailVerified) {
+                  if (!mounted) return;
                   Navigator.of(context)
                       .pushNamedAndRemoveUntil(notesRoute, (route) => false);
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                       const SnackBar(content: Text("Please Verify email!")));
+                  if (!mounted) return;
                   Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/', (route) => false);
+                      .pushNamedAndRemoveUntil(homeRoute, (route) => false);
                 }
               },
               child: const Text("Reload")),

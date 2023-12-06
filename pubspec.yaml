@@ -40,6 +40,11 @@ dependencies:
   firebase_analytics: ^10.4.4
   cloud_firestore: ^4.8.3
   http: ^1.1.0
+  url_launcher: ^6.1.14
+  gaform_1:
+    path: ../gaform_1
+  google_analytics_methods:
+    path: ../google_analytics_methods
 
 dev_dependencies:
   flutter_test:

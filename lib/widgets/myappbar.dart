@@ -1,14 +1,16 @@
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_analytics_methods/ga_methods.dart';
 import 'package:mynotebook/constants/routes.dart';
 
 enum MenuAction { profile, settings, logout }
 
-class MyAppBar extends StatelessWidget {
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final AnalyticsClass analytics = AnalyticsClass();
   final String appTitle;
   final AppBar appBar;
-  const MyAppBar({super.key, required this.appTitle, required this.appBar});
+  MyAppBar({super.key, required this.appTitle, required this.appBar});
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +18,33 @@ class MyAppBar extends StatelessWidget {
       title: Text(appTitle),
       backgroundColor: Colors.blue,
       actions: [
+        IconButton(
+            onPressed: () {
+              final route = ModalRoute.of(context);
+              log(route?.settings.name ?? "No idea");
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(route?.settings.name ?? "No idea")));
+
+              analytics.logCustomEvent('home_screen',
+                  {'initial_page': route?.settings.name ?? "No idea"});
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(notesRoute, (route) => false);
+            },
+            icon: Icon(Icons.home)),
         PopupMenuButton<MenuAction>(
           color: Colors.white,
           onSelected: (value) async {
             switch (value) {
               case MenuAction.logout:
                 final shouldLogout = await showLogoutDialog(context);
+                log(shouldLogout.toString());
                 if (shouldLogout) {
+                  final user = FirebaseAuth.instance.currentUser;
+                  analytics.logSessionTimeout('custom_logout_event',
+                      {'user_email_id': user?.email ?? "not known"});
                   await FirebaseAuth.instance.signOut();
+                  analytics.setUser(null, null); //userID is reset
+
                   // ignore: use_build_context_synchronously
                   Navigator.of(context)
                       .pushNamedAndRemoveUntil(loginRoute, (route) => false);
@@ -68,6 +89,10 @@ class MyAppBar extends StatelessWidget {
           ],
         );
       },
-    ).then((value) => false);
+    ).then((value) => value ?? false);
   }
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(50);
 }
