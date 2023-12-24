@@ -1,8 +1,7 @@
 import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_analytics_methods/ga_methods.dart';
+import 'package:mynotebook/auth/auth_service.dart';
 import 'package:mynotebook/constants/routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -28,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       duration,
       () async {
         analytics.logSessionTimeout('Session_timeout');
-        await FirebaseAuth.instance.signOut();
+        await AuthService.firebase().logOut();
         analytics.setUser(null, null);
         if (!mounted) return; //userID is reset
         Navigator.of(context)

@@ -29,6 +29,13 @@
             {
               "client_id": "462321759833-i055hvvtlgennbrv91d7ovojm61udgar.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "462321759833-j9d50ctcnh1h296ru2ggfgfn512a9snd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gyanapps.mynotebook"
+              }
             }
           ]
         }

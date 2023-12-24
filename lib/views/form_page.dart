@@ -1,8 +1,7 @@
 import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_analytics_methods/ga_methods.dart';
+import 'package:mynotebook/auth/auth_service.dart';
 import 'package:mynotebook/constants/routes.dart';
 import 'package:mynotebook/widgets/myappbar.dart';
 import '../widgets/custom_input.dart';
@@ -40,7 +39,7 @@ class _FormPageState extends State<FormPage> {
             onStepContinue: () {
               bool isLastStep = (currentStep == getSteps().length - 1);
               if (isLastStep) {
-                final user = FirebaseAuth.instance.currentUser;
+                final user = AuthService.firebase().currentUser;
                 log(user?.email ?? "Not found");
 
                 analytics.logCustomEvent('form_complete',

@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_analytics_methods/ga_methods.dart';
+import 'package:mynotebook/auth/auth_service.dart';
 import 'package:mynotebook/constants/routes.dart';
 import 'package:mynotebook/widgets/myappbar.dart';
 // import 'dart:html' as html;
@@ -16,7 +16,7 @@ class NotesView extends StatefulWidget {
 
 class _NotesViewState extends State<NotesView> {
   AnalyticsClass analytics = AnalyticsClass();
-  final user = FirebaseAuth.instance.currentUser;
+  final user = AuthService.firebase().currentUser;
   final linkString = 'https://www.youtube.com';
   // @override
   // Future<void> initState() async {
@@ -32,7 +32,7 @@ class _NotesViewState extends State<NotesView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text(user!.email ?? "Gyana "),
+            Text(user?.email ?? "Gyana "),
             OutlinedButton(
                 onPressed: () {
                   analytics

@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_analytics_methods/ga_methods.dart';
-import "dart:developer" as devtools show log;
-
+import 'package:mynotebook/auth/auth_exceptions.dart';
+import 'package:mynotebook/auth/auth_service.dart';
 import 'package:mynotebook/constants/routes.dart';
 
 class RegisterView extends StatefulWidget {
@@ -40,6 +39,7 @@ class _RegisterViewState extends State<RegisterView> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Register"),
+          backgroundColor: Colors.blue,
         ),
         body: Column(
           children: [
@@ -62,35 +62,25 @@ class _RegisterViewState extends State<RegisterView> {
                 final password = _password.text;
 
                 try {
-                  final userCredentials = await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
-                          email: email, password: password);
-                  devtools.log(userCredentials.toString());
+                  AuthService authService = AuthService.firebase();
+                  await authService.logIn(userId: email, password: password);
                   const SnackBar(content: Text("User registered"));
+
+                  await authService.sendEmailVerification();
 
                   analytics.signupEvent('analytics signup');
 
-                  // FirebaseAnalytics.instance
-                  //     .logSignUp(signUpMethod: "Custom Signup");
                   // ignore: use_build_context_synchronously
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil(loginRoute, (route) => false);
-                } on FirebaseAuthException catch (e) {
-                  print(e.toString());
-                  print(e.code);
-                  if (e.code == "auth/weak-password") {
-                    devtools.log("Weak password");
-                    const SnackBar(content: Text("Weak Password"));
-                  } else if (e.code == "auth/invalid-email") {
-                    devtools.log("Invalid email");
-                    const SnackBar(content: Text("Invalid Email"));
-                  } else if (e.code == "auth/email-already-in-use") {
-                    devtools.log("Email already in use");
-                    const SnackBar(content: Text("Email already in user"));
-                  } else {
-                    const SnackBar(
-                        content: Text("Some error occured. Try Again!!"));
-                  }
+                  Navigator.of(context).pushNamed(verifyRoute);
+                } on WeakPasswordAuthException {
+                  const SnackBar(content: Text("Weak Password"));
+                } on InvalidEmailAuthException {
+                  const SnackBar(content: Text("Invalid Email"));
+                } on EmailAlreadyInUseAuthEXception {
+                  const SnackBar(content: Text("Email already in use"));
+                } on GeneralAuthException {
+                  const SnackBar(
+                      content: Text("Some error Occured. Please try again."));
                 }
               },
               child: const Text("Register"),
