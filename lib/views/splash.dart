@@ -15,7 +15,6 @@ class _SplashScreenState extends State<SplashScreen> {
   AnalyticsClass analytics = AnalyticsClass();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     startTime();
   }

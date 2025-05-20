@@ -11,7 +11,7 @@ class FormPage extends StatefulWidget {
   const FormPage({Key? key}) : super(key: key);
 
   @override
-  _FormPageState createState() => _FormPageState();
+  State<FormPage> createState() => _FormPageState();
 }
 
 class _FormPageState extends State<FormPage> {

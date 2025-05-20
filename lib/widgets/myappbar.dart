@@ -30,7 +30,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               Navigator.of(context)
                   .pushNamedAndRemoveUntil(notesRoute, (route) => false);
             },
-            icon: Icon(Icons.home)),
+            icon: const Icon(Icons.home)),
         PopupMenuButton<MenuAction>(
           color: Colors.white,
           onSelected: (value) async {
@@ -93,6 +93,5 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(50);
+  Size get preferredSize => const Size.fromHeight(50);
 }
