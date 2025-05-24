@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_analytics_methods/ga_methods.dart';
-import 'package:mynotebook/auth/auth_exceptions.dart';
-import 'package:mynotebook/auth/auth_service.dart';
+import 'package:mynotebook/services/auth/auth_exceptions.dart';
+import 'package:mynotebook/services/auth/auth_service.dart';
 import 'package:mynotebook/constants/routes.dart';
 
 class LoginView extends StatefulWidget {

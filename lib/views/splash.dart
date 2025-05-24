@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_analytics_methods/ga_methods.dart';
-import 'package:mynotebook/auth/auth_service.dart';
+import 'package:mynotebook/services/auth/auth_service.dart';
 import 'package:mynotebook/constants/routes.dart';
 
 class SplashScreen extends StatefulWidget {

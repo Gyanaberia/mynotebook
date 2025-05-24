@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mynotebook/auth/auth_service.dart';
+import 'package:mynotebook/services/auth/auth_service.dart';
 import 'package:mynotebook/views/login_view.dart';
 import 'package:mynotebook/views/notesview.dart';
 import 'package:mynotebook/views/verify_email.dart';

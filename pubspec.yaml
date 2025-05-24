@@ -45,6 +45,9 @@ dependencies:
     path: ../gaform_1
   google_analytics_methods:
     path: ../google_analytics_methods
+  sqflite: ^2.4.2
+  path: ^1.9.1
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:

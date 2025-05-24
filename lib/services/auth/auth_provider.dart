@@ -1,4 +1,4 @@
-import 'package:mynotebook/auth/auth_user.dart';
+import 'package:mynotebook/services/auth/auth_user.dart';
 
 abstract class AuthProvider {
   AuthUser? get currentUser;
