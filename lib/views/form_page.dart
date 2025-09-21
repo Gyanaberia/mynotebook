@@ -8,7 +8,7 @@ import '../widgets/custom_input.dart';
 // import 'package:stepper_widget/widgets/custom_input.dart';
 
 class FormPage extends StatefulWidget {
-  const FormPage({Key? key}) : super(key: key);
+  const FormPage({super.key});
 
   @override
   State<FormPage> createState() => _FormPageState();

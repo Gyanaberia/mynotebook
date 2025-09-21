@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mynotebook/constants/string_constants.dart';
 
+///Class representing a user in the database
+///It contains userID, email and username
+
 @immutable
 class DatabaseUser {
   final int userId;
