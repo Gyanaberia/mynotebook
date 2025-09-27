@@ -25,6 +25,13 @@ class NotesServices {
     return _initializeDb();
   }
 
+  Future<void> _ensureDBisOpen()async{
+    try{
+      await open();
+    } on DatabaseAlreadyOpenException{
+      //empty
+    }
+  }
   ///Getter to access the database instance
   Database get db{
     if (_db != null) {
@@ -72,6 +79,7 @@ class NotesServices {
   
   ///Creates a note for the provided user
   Future<DatabaseNotes>createNote({required String title,required String content,required int userId})async {
+    _ensureDBisOpen();
     final database = db;
     //insert the note in the database
     final noteId =await  database.insert(StringConstants.notesTable, {
@@ -95,6 +103,7 @@ class NotesServices {
 
 
   Future<void> deleteNote(int noteId) async {
+        _ensureDBisOpen();
     final database = db;
     final notePresent = await database.query(
       StringConstants.notesTable,
@@ -114,6 +123,8 @@ class NotesServices {
   }
 
   Future<int>deleteAllNotesOfUser(int userId)async{
+        _ensureDBisOpen();
+
     final database = db;
     // final notes = await database.query(StringConstants.notesTable, where: '${StringConstants.userId} = ?', whereArgs: [userId]);
 
@@ -128,6 +139,8 @@ class NotesServices {
   }
 
   Future<DatabaseNotes>getNote(int noteId)async {
+        _ensureDBisOpen();
+
     final database = db;
     final notes = await database.query(
       StringConstants.notesTable,
@@ -146,6 +159,8 @@ class NotesServices {
   }
 
   Future<List<DatabaseNotes>> getAllNotesOfUser(int userId) async {
+        _ensureDBisOpen();
+
     final database = db;
     final notes = await database.query(StringConstants.notesTable,where: '${StringConstants.userId} = ?', whereArgs: [userId]);
     if (notes.isEmpty) {
@@ -156,6 +171,8 @@ class NotesServices {
 
   ///Returns all notes in the database
   Future<List<DatabaseNotes>>getAllNotes()async{
+        _ensureDBisOpen();
+
     final database = db;
     final notes = await database.query(StringConstants.notesTable);
         if (notes.isEmpty) {
@@ -165,6 +182,8 @@ class NotesServices {
   }
 
   Future<DatabaseNotes> updateNote({required int noteId,String?title,String? content,String? cloudSync}) async {
+        _ensureDBisOpen();
+
     final database = db;
 await getNote(noteId);
     final updateData ={
@@ -196,6 +215,8 @@ await getNote(noteId);
     required String email,
     required String username,
   }) async {
+        _ensureDBisOpen();
+
     final database = db;
     final existingUsers = await database.query(StringConstants.usersTable,limit: 1, where: '${StringConstants.email}=?',whereArgs: [email.toLowerCase()]);
     if(existingUsers.isNotEmpty){
@@ -216,6 +237,8 @@ await getNote(noteId);
   /// Retrieves a user from the database by their email.
   /// Throws [UserDoesntExistException] if the user with the given email does not exist.
   Future<DatabaseUser>fetchUser({required String email}) async{
+        _ensureDBisOpen();
+
     final database = db;
     final user =await database.query(StringConstants.usersTable, where: '${StringConstants.email} = ?', whereArgs: [email.toLowerCase()]);
     if(user.isEmpty){
@@ -226,6 +249,8 @@ await getNote(noteId);
   }
 
   Future<DatabaseUser>getOrCreateUser({required String email,required String username})async{
+        _ensureDBisOpen();
+
     DatabaseUser user;
     try {
           user = await fetchUser(email: email);
@@ -238,6 +263,8 @@ await getNote(noteId);
   /// Retrieves a user from the database by their email.
   /// Throws [CouldntDeleteUserException] if the user with the given email does not exist.
   Future<void> deleteUser({required String email})async{
+        _ensureDBisOpen();
+
     final database = db;
     final deletedUser = await database.delete(StringConstants.usersTable, where: '${StringConstants.email} = ?', whereArgs: [email.toLowerCase()]);
     if(deletedUser != 1){
