@@ -8,10 +8,22 @@ import 'package:path/path.dart'show join;
 import 'package:sqflite/sqflite.dart';
 
 class NotesServices {
-  Database? _db;
-  List<DatabaseNotes>_notes = [];
-  final StreamController _notesController = StreamController<List<DatabaseNotes>>.broadcast();
+  //private constructor
+  NotesServices._sharedInstance();
+  //instance of that constructor
+  static final NotesServices _shared = NotesServices._sharedInstance();
+  //singleton
+  factory NotesServices()=>_shared;
 
+  Database? _db;
+  //cache all notes
+  List<DatabaseNotes>_notes = [];
+
+  //store the changes of notes
+  final StreamController<List<DatabaseNotes>> _notesController = StreamController<List<DatabaseNotes>>.broadcast();
+  
+  //the changes are provided as a stream to the UI
+  Stream<List<DatabaseNotes>>get  allNotes => _notesController.stream;
 
   Future<void>_cachedNotes()async{
     _notes = await getAllNotes();
@@ -213,7 +225,7 @@ await getNote(noteId);
   /// Returns a [DatabaseUser] object representing the created user.
   Future<DatabaseUser>createUser({
     required String email,
-    required String username,
+    String? username,
   }) async {
         _ensureDBisOpen();
 
@@ -231,7 +243,7 @@ await getNote(noteId);
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    return DatabaseUser(userId: userId, email: email.toLowerCase(), username: username);
+    return DatabaseUser(userId: userId, email: email.toLowerCase(), username: username??"NaN");
   }
 
   /// Retrieves a user from the database by their email.
@@ -248,7 +260,7 @@ await getNote(noteId);
     }
   }
 
-  Future<DatabaseUser>getOrCreateUser({required String email,required String username})async{
+  Future<DatabaseUser>getOrCreateUser({required String email,String? username})async{
         _ensureDBisOpen();
 
     DatabaseUser user;

@@ -9,8 +9,12 @@ enum MenuAction { profile, settings, logout }
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AnalyticsClass analytics = AnalyticsClass();
   final String appTitle;
-  final AppBar appBar;
-  MyAppBar({super.key, required this.appTitle, required this.appBar});
+  final List<Widget>? trailingIcons;
+  MyAppBar({
+    super.key,
+    required this.appTitle,
+    this.trailingIcons,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +22,10 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(appTitle),
       backgroundColor: Colors.blue,
       actions: [
+        if (trailingIcons != null) ...trailingIcons!,
+        SizedBox(
+          width: 10,
+        ),
         IconButton(
             onPressed: () {
               final route = ModalRoute.of(context);

@@ -23,7 +23,7 @@ class _FormPageState extends State<FormPage> {
     return Scaffold(
       appBar: MyAppBar(
         appTitle: "Stepper Widget ",
-        appBar: AppBar(),
+        
       ),
       body: Container(
           padding: const EdgeInsets.all(20),
