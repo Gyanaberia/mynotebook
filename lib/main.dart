@@ -6,7 +6,8 @@ import 'package:mynotebook/views/home_page.dart';
 import 'package:mynotebook/views/new_form.dart';
 import 'package:mynotebook/views/form_page.dart';
 import 'package:mynotebook/views/login_view.dart';
-import 'package:mynotebook/views/notesview.dart';
+import 'package:mynotebook/views/notes/new_note_view.dart';
+import 'package:mynotebook/views/notes/notesview.dart';
 import 'package:mynotebook/views/register_view.dart';
 import 'package:mynotebook/views/splash.dart';
 import 'package:mynotebook/views/verify_email.dart';
@@ -21,7 +22,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   // static FirebaseAnalyticsObserver observer =
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         newForm: (context) => const NewCustomForm(),
         splash: (context) => const SplashScreen(),
         verifyRoute: (context) => const VerifyEmailView(),
+        newNoteRoute:(context)=>const NewNoteView(),
       },
     );
   }

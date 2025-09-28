@@ -6,3 +6,4 @@ const homeRoute = '/home/';
 const verifyRoute = '/verifyEmail/';
 const newForm = '/newform/';
 const splash = '/splash/';
+const newNoteRoute = '/notes/newnote';

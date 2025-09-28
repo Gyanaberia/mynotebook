@@ -1,6 +1,6 @@
-import 'package:mynotebook/auth/auth_user.dart';
+import 'package:mynotebook/services/auth/auth_user.dart';
 
-abstract class AuthProvider {
+abstract class UserAuthProvider {
   AuthUser? get currentUser;
 
   Future<void> initialize();

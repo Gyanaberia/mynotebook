@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mynotebook/auth/auth_exceptions.dart';
-import 'package:mynotebook/auth/auth_provider.dart';
-import 'package:mynotebook/auth/auth_user.dart';
+import 'package:mynotebook/services/auth/auth_exceptions.dart';
+import 'package:mynotebook/services/auth/auth_provider.dart';
+import 'package:mynotebook/services/auth/auth_user.dart';
 
 void main() {
   group("Testing Auth Provider", () {
@@ -37,7 +37,7 @@ void main() {
 
 class NotInitializedException implements Exception {}
 
-class MockAuthProvider implements AuthProvider {
+class MockAuthProvider implements UserAuthProvider {
   bool _isInitialized = false;
   AuthUser? _user;
   bool get isInitialized => _isInitialized;

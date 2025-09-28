@@ -1,9 +1,9 @@
-import 'package:mynotebook/auth/auth_provider.dart';
-import 'package:mynotebook/auth/auth_user.dart';
-import 'package:mynotebook/auth/firebase_auth_provider.dart';
+import 'package:mynotebook/services/auth/auth_provider.dart';
+import 'package:mynotebook/services/auth/auth_user.dart';
+import 'package:mynotebook/services/auth/firebase_auth_provider.dart';
 
-class AuthService implements AuthProvider {
-  final AuthProvider authProvider;
+class AuthService implements UserAuthProvider {
+  final UserAuthProvider authProvider;
 
   AuthService({required this.authProvider});
 
