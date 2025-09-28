@@ -7,7 +7,7 @@ class NewCustomForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(appTitle: "Custom Form", appBar: AppBar()),
+      appBar: MyAppBar(appTitle: "Custom Form",),
       body: const Scaffold()
     );
   }
