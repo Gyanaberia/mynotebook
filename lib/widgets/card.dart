@@ -22,7 +22,7 @@ class _MyCardState extends State<MyCard> {
               children: <Widget>[
                 Text(widget.cardTitle),
                 const Spacer(),
-                const ButtonBar()
+                // const ButtonBar()
               ],
             ),
           ),
