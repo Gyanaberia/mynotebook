@@ -9,7 +9,11 @@ import 'package:sqflite/sqflite.dart';
 
 class NotesServices {
   //private constructor
-  NotesServices._sharedInstance();
+  NotesServices._sharedInstance() {
+    _notesController = StreamController<List<DatabaseNotes>>.broadcast(
+      onListen: () => _notesController.sink.add(_notes),
+    );
+  }
   //instance of that constructor
   static final NotesServices _shared = NotesServices._sharedInstance();
   //singleton
@@ -20,8 +24,7 @@ class NotesServices {
   List<DatabaseNotes> _notes = [];
 
   //store the changes of notes
-  final StreamController<List<DatabaseNotes>> _notesController =
-      StreamController<List<DatabaseNotes>>.broadcast();
+  late final StreamController<List<DatabaseNotes>> _notesController;
 
   //the changes are provided as a stream to the UI
   Stream<List<DatabaseNotes>> get allNotes => _notesController.stream;
