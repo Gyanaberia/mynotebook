@@ -66,6 +66,7 @@ class _NotesViewState extends State<NotesView> {
                                     subtitle: Text(
                                       allNotes[index].content,
                                       maxLines: 2,
+                                      softWrap: true,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
