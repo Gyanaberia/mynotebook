@@ -5,10 +5,14 @@ import 'package:mynotebook/services/auth/firebase_auth_provider.dart';
 class AuthService implements UserAuthProvider {
   final UserAuthProvider authProvider;
 
-  AuthService({required this.authProvider});
+  // Private named constructor — nobody outside this class can call `AuthService(...)` anymore
+  AuthService._(this.authProvider);
 
-  factory AuthService.firebase() =>
-      AuthService(authProvider: FirebaseAuthProvider());
+  // The single, lazily-created instance
+  static final AuthService _firebaseinstance = AuthService._(FirebaseAuthProvider());
+
+  // Public factory — always returns the same instance
+  factory AuthService.firebase() => _firebaseinstance;
 
   @override
   Future<AuthUser> createUser({

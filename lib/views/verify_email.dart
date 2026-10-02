@@ -10,7 +10,9 @@ class VerifyEmailView extends StatefulWidget {
 }
 
 class _VerifyEmailViewState extends State<VerifyEmailView> {
+  
   AuthService authService = AuthService.firebase();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,30 +36,11 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
               await authService.logOut();
               if (context.mounted) {
                 Navigator.of(context)
-                    .pushNamedAndRemoveUntil(registerRoute, (route) => false);
+                    .pushNamedAndRemoveUntil(loginRoute, (route) => false);
               }
             },
             child: const Text("Restart"),
           ),
-          // TextButton(
-          //     onPressed: () async {
-          //       final messenger = ScaffoldMessenger.of(context);
-          //       await FirebaseAuth.instance.currentUser?.reload();
-          //       final user = FirebaseAuth.instance.currentUser;
-          //       log(user.toString());
-          //       if (user!.emailVerified) {
-          //         if (!mounted) return;
-          //         Navigator.of(context)
-          //             .pushNamedAndRemoveUntil(notesRoute, (route) => false);
-          //       } else {
-          //         messenger.showSnackBar(
-          //             const SnackBar(content: Text("Please Verify email!")));
-          //         if (!mounted) return;
-          //         Navigator.of(context)
-          //             .pushNamedAndRemoveUntil(homeRoute, (route) => false);
-          //       }
-          //     },
-          //     child: const Text("Reload")),
         ],
       ),
     );

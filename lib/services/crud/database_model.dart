@@ -8,7 +8,7 @@ import 'package:mynotebook/constants/string_constants.dart';
 class DatabaseUser {
   final int userId;
   final String email;
-  final String username;
+  final String? username;
 
   const DatabaseUser(
       {required this.userId, required this.email, required this.username});
@@ -16,12 +16,11 @@ class DatabaseUser {
   DatabaseUser.fromMap(Map<String, Object?> map)
       : userId = map[StringConstants.userId] as int,
         email = map[StringConstants.email] as String,
-        username = map[StringConstants.userName] as String;
+        username = map[StringConstants.userName] as String?;
 
   @override
-  bool operator ==(covariant DatabaseUser other) {
-    return userId == other.userId;
-  }
+  bool operator ==(Object other) =>
+    other is DatabaseUser && userId == other.userId;
   
   @override
   int get hashCode =>userId.hashCode;
@@ -38,7 +37,7 @@ class DatabaseNotes{
   final bool cloudSync;
 
   const DatabaseNotes( 
-      {required this.noteId, required this.title, required this.content, required this.userId,required this.cloudSync});
+      {required this.noteId, required this.title, required this.content, required this.userId, required this.cloudSync});
 
   DatabaseNotes.fromMap(Map<String, Object?> map)
       : noteId = map[StringConstants.noteId] as int,
@@ -48,9 +47,8 @@ class DatabaseNotes{
         cloudSync = map[StringConstants.cloudSync] as int==1? true : false;
 
   @override
-  bool operator ==(covariant DatabaseNotes other) {
-    return noteId == other.noteId;
-  }
+  bool operator ==(Object other) =>
+      other is DatabaseNotes && noteId == other.noteId;
   
   @override
   int get hashCode =>noteId.hashCode;

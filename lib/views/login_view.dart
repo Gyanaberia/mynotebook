@@ -64,30 +64,24 @@ class _LoginViewState extends State<LoginView> {
                   if (email == '' || password == '') {
                     message.showSnackBar(const SnackBar(
                         content: Text("Empty email or password field!")));
+                        return;
                   }
                   //PERFORM LOGIN AUTHENTICATION
 
-                  authService.logIn(userId: email, password: password);
+                  await authService.logIn(userId: email, password: password);
 
                   //SET USER PROPERTIES
-                  if (email == 'tester@gmail.com') {
                     analytics.setUser(email, 'user');
-                  } else if (email == "tester3@gmail.com") {
-                    analytics.setUser(email, "manager");
-                  } else if (email == 'tester2@gmail.com') {
-                    analytics.setUser(email, 'manager');
-                  } else {
-                    analytics.setUser(email, 'user');
-                  }
-
+                  
                   //LOG LOGIN EVENT
                   analytics.logCustomEvent(
                       'login_event', {'method': "firebase_login"});
 
                   analytics.loginEvent('new_custom_login');
 
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   final user = authService.currentUser;
+                  print(user?.isEmailVerifired);
                   if (user?.isEmailVerifired ?? false) {
                     Navigator.of(context)
                         .pushNamedAndRemoveUntil(notesRoute, (route) => false);

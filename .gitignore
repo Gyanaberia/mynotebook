@@ -49,3 +49,4 @@ app.*.map.json
 /macos/Runner.xcodeproj/*
 *.swift
 pubspec.lock
+.env
