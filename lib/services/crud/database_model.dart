@@ -3,7 +3,6 @@ import 'package:mynotebook/constants/string_constants.dart';
 
 ///Class representing a user in the database
 ///It contains userID, email and username
-
 @immutable
 class DatabaseUser {
   final int userId;
@@ -31,19 +30,23 @@ class DatabaseUser {
 /// It contains the note ID, title, content, user ID, and a flag indicating whether the note is synced with the cloud.
 class DatabaseNotes{
   final int noteId;
+  final String firestoreNoteId;
   final String title;
   final String content;
   final int userId;
+  final int updatedAt;
   final bool cloudSync;
 
-  const DatabaseNotes( 
-      {required this.noteId, required this.title, required this.content, required this.userId, required this.cloudSync});
+  const DatabaseNotes(
+      {required this.noteId, required this.firestoreNoteId, required this.title, required this.content, required this.userId, required this.updatedAt, required this.cloudSync});
 
   DatabaseNotes.fromMap(Map<String, Object?> map)
       : noteId = map[StringConstants.noteId] as int,
+        firestoreNoteId = map[StringConstants.firestoreNoteId] as String,
         title = map[StringConstants.title] as String,
         content = map[StringConstants.content] as String,
         userId = map[StringConstants.userId] as int,
+        updatedAt = map[StringConstants.updatedAt] as int,
         cloudSync = map[StringConstants.cloudSync] as int==1? true : false;
 
   @override
