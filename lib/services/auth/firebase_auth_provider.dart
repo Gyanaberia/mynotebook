@@ -1,16 +1,16 @@
+import 'package:mynotebook/services/auth/auth_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:mynotebook/auth/auth_exceptions.dart';
-import 'package:mynotebook/auth/auth_provider.dart';
-import 'package:mynotebook/auth/auth_user.dart';
+import 'package:mynotebook/services/auth/auth_exceptions.dart';
+import 'package:mynotebook/services/auth/auth_user_model.dart';
 import 'package:mynotebook/firebase_options.dart';
 
-class FirebaseAuthProvider implements AuthProvider {
+class FirebaseAuthProvider implements UserAuthProvider {
   @override
   Future<AuthUser> createUser(
       {required String userId, required String password}) async {
     try {
-      FirebaseAuth.instance
+      await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: userId, password: password);
       final user = currentUser;
       if (user != null) {
@@ -19,6 +19,7 @@ class FirebaseAuthProvider implements AuthProvider {
         throw UserNotLoggedInAuthException();
       }
     } on FirebaseAuthException catch (e) {
+      print(e);
       if (e.code == "weak-password") {
         throw WeakPasswordAuthException();
       } else if (e.code == "invalid-email") {
@@ -28,8 +29,18 @@ class FirebaseAuthProvider implements AuthProvider {
       } else {
         throw GeneralAuthException();
       }
-    } catch (_) {
-      throw GeneralAuthException();
+    } catch (e) {
+      // This will catch JS (web) errors
+      final message = e.toString();
+      if (message.contains('invalid-email')) {
+        throw InvalidEmailAuthException();
+      } else if (message.contains('wrong-password')) {
+        throw WrongPasswordAuthEXception();
+      } else if (message.contains('user-not-found')) {
+        throw UserNotFoundAuthException();
+      } else {
+        throw GeneralAuthException();
+      }
     }
   }
 
@@ -56,7 +67,7 @@ class FirebaseAuthProvider implements AuthProvider {
         throw UserNotLoggedInAuthException();
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == "invalid-email") {
+      if (e.code == "firebase_auth/invalid-email") {
         throw InvalidEmailAuthException();
       } else if (e.code == "wrong-password") {
         throw WrongPasswordAuthEXception();

@@ -4,8 +4,7 @@ class CustomInput extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final String? hint;
   final InputBorder? inputBorder;
-  const CustomInput({Key? key, this.onChanged, this.hint, this.inputBorder})
-      : super(key: key);
+  const CustomInput({super.key, this.onChanged, this.hint, this.inputBorder});
 
   @override
   Widget build(BuildContext context) {

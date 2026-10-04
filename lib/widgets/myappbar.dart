@@ -8,62 +8,68 @@ enum MenuAction { profile, settings, logout }
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AnalyticsClass analytics = AnalyticsClass();
-  final String appTitle;
-  final AppBar appBar;
-  MyAppBar({super.key, required this.appTitle, required this.appBar});
+  final Widget? appTitle;
+  final Widget? leadingIcon;
+  final List<Widget>? trailingIcons;
+  final bool showMenu;
+  final bool automaticallyImplyLeading;
+  MyAppBar({
+    super.key,
+    this.appTitle,
+    this.leadingIcon,
+    this.trailingIcons,
+    this.showMenu = true,
+    this.automaticallyImplyLeading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(appTitle),
+      leadingWidth: 30,
+      leading: leadingIcon,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: appTitle,
+      ),
       backgroundColor: Colors.blue,
+      automaticallyImplyLeading: automaticallyImplyLeading,
       actions: [
-        IconButton(
-            onPressed: () {
-              final route = ModalRoute.of(context);
-              log(route?.settings.name ?? "No idea");
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(route?.settings.name ?? "No idea")));
+        if (trailingIcons != null) ...trailingIcons!,
+        if (showMenu)
+          PopupMenuButton<MenuAction>(
+            color: Colors.white,
+            onSelected: (value) async {
+              switch (value) {
+                case MenuAction.logout:
+                  final shouldLogout = await showLogoutDialog(context);
+                  log(shouldLogout.toString());
+                  if (shouldLogout) {
+                    final user = FirebaseAuth.instance.currentUser;
+                    analytics.logSessionTimeout('custom_logout_event',
+                        {'user_email_id': user?.email ?? "not known"});
+                    await FirebaseAuth.instance.signOut();
+                    analytics.setUser(null, null); //userID is reset
 
-              analytics.logCustomEvent('home_screen',
-                  {'initial_page': route?.settings.name ?? "No idea"});
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil(notesRoute, (route) => false);
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil(loginRoute, (route) => false);
+                    // ignore: use_build_context_synchronously
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("User Logged Out")));
+                  }
+                default:
+              }
             },
-            icon: const Icon(Icons.home)),
-        PopupMenuButton<MenuAction>(
-          color: Colors.white,
-          onSelected: (value) async {
-            switch (value) {
-              case MenuAction.logout:
-                final shouldLogout = await showLogoutDialog(context);
-                log(shouldLogout.toString());
-                if (shouldLogout) {
-                  final user = FirebaseAuth.instance.currentUser;
-                  analytics.logSessionTimeout('custom_logout_event',
-                      {'user_email_id': user?.email ?? "not known"});
-                  await FirebaseAuth.instance.signOut();
-                  analytics.setUser(null, null); //userID is reset
-
-                  // ignore: use_build_context_synchronously
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil(loginRoute, (route) => false);
-                  // ignore: use_build_context_synchronously
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("User Logged Out")));
-                }
-              default:
-            }
-          },
-          itemBuilder: (context) {
-            return const [
-              PopupMenuItem(value: MenuAction.profile, child: Text("Profile")),
-              PopupMenuItem(
-                  value: MenuAction.settings, child: Text("Settings")),
-              PopupMenuItem(value: MenuAction.logout, child: Text("Log out")),
-            ];
-          },
-        )
+            itemBuilder: (context) {
+              return const [
+                PopupMenuItem(
+                    value: MenuAction.profile, child: Text("Profile")),
+                PopupMenuItem(
+                    value: MenuAction.settings, child: Text("Settings")),
+                PopupMenuItem(value: MenuAction.logout, child: Text("Log out")),
+              ];
+            },
+          )
       ],
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mynotebook/auth/auth_exceptions.dart';
-import 'package:mynotebook/auth/auth_provider.dart';
-import 'package:mynotebook/auth/auth_user.dart';
+import 'package:mynotebook/services/auth/auth_exceptions.dart';
+import 'package:mynotebook/services/auth/auth_provider.dart';
+import 'package:mynotebook/services/auth/auth_user_model.dart';
 
 void main() {
   group("Testing Auth Provider", () {
@@ -37,7 +37,7 @@ void main() {
 
 class NotInitializedException implements Exception {}
 
-class MockAuthProvider implements AuthProvider {
+class MockAuthProvider implements UserAuthProvider {
   bool _isInitialized = false;
   AuthUser? _user;
   bool get isInitialized => _isInitialized;
@@ -63,7 +63,7 @@ class MockAuthProvider implements AuthProvider {
     if (!isInitialized) throw NotInitializedException();
     if (userId == 'ssahu72731@gmail.com') throw UserNotFoundAuthException();
     if (password == '12345678') throw WrongPasswordAuthEXception();
-    var user = AuthUser(isEmailVerifired: false, email: userId);
+    var user = AuthUser(uid: "", isEmailVerifired: false, email: userId);
     _user = user;
 
     return Future.value(_user);
@@ -81,7 +81,7 @@ class MockAuthProvider implements AuthProvider {
   Future<void> sendEmailVerification() async {
     if (!isInitialized) throw NotInitializedException();
     if (_user == null) throw UserNotFoundAuthException();
-    _user = AuthUser(isEmailVerifired: true, email: _user?.email);
+    _user = AuthUser(uid: "", isEmailVerifired: true, email: _user?.email);
     await Future.delayed(const Duration(seconds: 1));
   }
 }
